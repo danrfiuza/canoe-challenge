@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
-use App\Models\FundCompany;
+use App\Services\FundCompanyService;
 
 class UniqueFundCompany implements ValidationRule
 {
@@ -17,10 +17,7 @@ class UniqueFundCompany implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (FundCompany::where('fund_id', $value)
-            ->where('company_id', $this->companyId)
-            ->exists()
-        ) {
+        if ((new FundCompanyService())->isFundCompanyUnique($value, $this->companyId)) {
             $fail('The combination of fund_id and company_id already exists.');
         }
     }

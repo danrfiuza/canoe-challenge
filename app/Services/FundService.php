@@ -25,9 +25,9 @@ class FundService
     public function index(array $data = [])
     {
         return Fund::with($data['with'] ?? [])
-            ->when(isset($data['name']), fn($query) => $query->where('name', 'like', '%' . $data['name'] . '%'))
-            ->when(isset($data['fund_manager_name']), fn($query) => $query->whereHas('fundManager', fn($q) => $q->where('name', 'like', '%' . $data['fund_manager_name'] . '%')))
-            ->when(isset($data['start_year']), fn($query) => $query->where('start_year', $data['start_year']))
+            ->when(Arr::exists($data, 'name'), fn($query) => $query->where('name', 'like', '%' . $data['name'] . '%'))
+            ->when(Arr::exists($data, 'fund_manager_name'), fn($query) => $query->whereHas('fundManager', fn($q) => $q->where('name', 'like', '%' . $data['fund_manager_name'] . '%')))
+            ->when(Arr::exists($data, 'start_year'), fn($query) => $query->where('start_year', $data['start_year']))
             ->paginate($data['per_page'] ?? 20)
             ->appends(Arr::except($data, ['page']));
     }
