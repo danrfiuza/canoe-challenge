@@ -24,7 +24,11 @@ class UpdateFundRequest extends ApiFormRequest
         return [
             'name' => 'nullable|string',
             'start_year' => 'nullable|integer',
-            'fund_manager_id' => 'nullable|integer|exists:fund_managers,id'
+            'fund_manager_id' => 'nullable|integer|exists:fund_managers,id',
+            'aliases' => 'array|nullable',
+            'aliases.*.id' => 'integer|nullable|exists:fund_aliases,id',
+            'aliases.*.alias' => 'string|max:255',
+            'aliases.*.fund_id' => 'integer|exists:funds,id',
         ];
     }
 }

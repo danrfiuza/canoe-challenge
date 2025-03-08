@@ -13,11 +13,12 @@ class FundService
     {
         return DB::transaction(function () use ($data) {
             $fund = Fund::create($data);
-            if (isset($data['fund_aliases'])) {
-                $aliases = array_map(fn($alias) => ['alias' => $alias], $data['fund_aliases']);
+            if (isset($data['aliases'])) {
+                $aliases = array_map(fn($alias) => ['alias' => $alias['alias']], $data['aliases']);
                 $fund->aliases()->createMany($aliases);
             }
 
+            $this->dispatchDuplicatedFundWarningEvent($fund);
             return $fund;
         });
     }
@@ -34,7 +35,16 @@ class FundService
 
     public function update(Fund $fund, array $data)
     {
-        return DB::transaction(fn() => tap($fund)->update($data)->refresh());
+        return DB::transaction(function () use ($data, $fund) {
+            $fund->update($data);
+            if (isset($data['aliases'])) {
+                (new FundAliasService())->upsertMany($data['aliases']);
+            }
+
+            $fund->refresh();
+            $this->dispatchDuplicatedFundWarningEvent($fund);
+            return $fund;
+        });
     }
 
     public function delete(Fund $fund)
@@ -45,7 +55,9 @@ class FundService
     public function dispatchDuplicatedFundWarningEvent(Fund $fund)
     {
         if ($this->isFundDuplicated($fund)) {
-            event(new DuplicatedFundWarning($fund));
+            DuplicatedFundWarning::dispatch($fund);
+            // event(new DuplicatedFundWarning($fund));
+            // broadcast(new DuplicatedFundWarning($fund));
         }
     }
 
@@ -63,5 +75,11 @@ class FundService
             ->groupBy(function ($fund) {
                 return $fund->fund_manager_id . '-' . $fund->aliases->pluck('alias')->join(',');
             });
+    }
+
+
+    public static function duplicatedFundWarningMessage($fund)
+    {
+        return "Warning: The fund " . $fund->name . " has duplicated Alias and Fund Manager.";
     }
 }

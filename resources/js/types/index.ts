@@ -1,36 +1,32 @@
-import type { PageProps } from '@inertiajs/core';
-import type { LucideIcon } from 'lucide-vue-next';
+import { DefineComponent } from "vue";
 
-export interface Auth {
-    user: User;
-}
-
-export interface BreadcrumbItem {
-    title: string;
-    href: string;
-}
-
-export interface NavItem {
-    title: string;
-    href: string;
-    icon?: LucideIcon;
-    isActive?: boolean;
-}
-
-export interface SharedData extends PageProps {
-    name: string;
-    quote: { message: string; author: string };
-    auth: Auth;
-}
-
-export interface User {
+export interface Fund {
     id: number;
     name: string;
-    email: string;
-    avatar?: string;
-    email_verified_at: string | null;
-    created_at: string;
-    updated_at: string;
+    start_year: number;
+    fund_manager: {
+        name: string;
+    };
 }
 
-export type BreadcrumbItemType = BreadcrumbItem;
+export interface FundAlias {
+    id: number | null;
+    alias: string;
+    fund_id: number;
+}
+
+export interface FundCompany {
+    id: number | null;
+    company_id: string;
+    fund_id: number;
+}
+
+export interface Company {
+    id: number | null;
+    name: string;
+}
+
+export interface Action {
+    label: string;
+    callback: () => void;
+}

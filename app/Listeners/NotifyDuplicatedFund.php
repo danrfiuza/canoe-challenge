@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\DuplicatedFundWarning;
+use App\Services\FundService;
 use Illuminate\Support\Facades\Log;
 
 class NotifyDuplicatedFund
@@ -20,6 +21,6 @@ class NotifyDuplicatedFund
      */
     public function handle(DuplicatedFundWarning $event): void
     {
-        Log::warning("Duplicate Fund Warning: Fund '{$event->fund->name}' with manager '{$event->fund->fundManager->name}' detected.");
+        Log::warning(FundService::duplicatedFundWarningMessage($event->fund));
     }
 }

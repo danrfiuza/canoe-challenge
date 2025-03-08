@@ -23,9 +23,10 @@ class CreateFundRequest extends ApiFormRequest
             'name' => 'string|unique:fund_managers,name|max:255',
             'start_year' => 'integer',
             'fund_manager_id' => 'integer|exists:fund_managers,id',
-            'fund_aliases' => 'array|nullable',
-            // 'fund_aliases.*' => 'string|unique:fund_aliases,alias|max:255',
-            'fund_aliases.*' => 'string|max:255',
+            'aliases' => 'array|nullable',
+            'aliases.*.id' => 'integer|nullable|exists:fund_aliases,id',
+            'aliases.*.alias' => 'string|max:255',
+            'aliases.*.fund_id' => 'integer|nullable|exists:funds,id',
         ];
     }
 }

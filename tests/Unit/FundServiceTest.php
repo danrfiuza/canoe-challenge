@@ -31,7 +31,10 @@ class FundServiceTest extends TestCase
         $data = [
             'name' => 'New Fund',
             'fund_manager_id' => $fundManager->id,
-            'fund_aliases' => ['Alias1', 'Alias2'],
+            'aliases' => [
+                ['alias' => 'Alias1', 'fund_id' => null, 'id' => null],
+                ['alias' => 'Alias2', 'fund_id' => null, 'id' => null],
+            ],
             'start_year' => 2021,
         ];
 

@@ -32,4 +32,23 @@ class FundAliasService
     {
         return DB::transaction(fn() => $fundAlias->delete());
     }
+
+    public function upsertMany(array $aliases)
+    {
+        return DB::transaction(function () use ($aliases) {
+            $results = [];
+            foreach ($aliases as $aliasData) {
+                if (isset($aliasData['id'])) {
+                    $fundAlias = FundAlias::find($aliasData['id']);
+                    if ($fundAlias) {
+                        $fundAlias->update($aliasData);
+                        $results[] = $fundAlias->refresh();
+                    }
+                } else {
+                    $results[] = FundAlias::create($aliasData);
+                }
+            }
+            return $results;
+        });
+    }
 }

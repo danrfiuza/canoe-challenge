@@ -7,12 +7,10 @@ use App\Models\FundAlias;
 use App\Services\FundAliasService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use Tests\Unit\Helpers\FundTestHelper;
 
 class FundAliasServiceTest extends TestCase
 {
     use RefreshDatabase;
-    use FundTestHelper;
 
     protected $fundAliasService;
 
@@ -26,14 +24,14 @@ class FundAliasServiceTest extends TestCase
     {
         $fund = Fund::factory()->create();
         $data = [
-            'alias' => 'New Alias',
+            'alias' => 'Alias 1',
             'fund_id' => $fund->id,
         ];
 
         $fundAlias = $this->fundAliasService->create($data);
 
-        $this->assertDatabaseHas('fund_aliases', ['alias' => 'New Alias']);
-        $this->assertEquals('New Alias', $fundAlias->alias);
+        $this->assertDatabaseHas('fund_aliases', ['alias' => 'Alias 1', 'fund_id' => 1]);
+        $this->assertEquals('Alias 1', $fundAlias->alias);
         $this->assertEquals(1, $fundAlias->fund_id);
     }
 
@@ -66,5 +64,32 @@ class FundAliasServiceTest extends TestCase
         $this->fundAliasService->delete($fundAlias);
 
         $this->assertDatabaseMissing('fund_aliases', ['id' => $fundAlias->id]);
+    }
+
+    public function testUpsertMany()
+    {
+        $fund = Fund::factory()->create();
+        $aliases = [
+            ['alias' => 'Alias 1', 'fund_id' => $fund->id],
+            ['alias' => 'Alias 2', 'fund_id' => $fund->id],
+        ];
+
+        $results = $this->fundAliasService->upsertMany($aliases);
+
+        $this->assertCount(2, $results);
+        $this->assertDatabaseHas('fund_aliases', ['alias' => 'Alias 1', 'fund_id' => 1]);
+        $this->assertDatabaseHas('fund_aliases', ['alias' => 'Alias 2', 'fund_id' => 1]);
+
+        $existingAlias = $results[0];
+        $updatedAliases = [
+            ['id' => $existingAlias->id, 'alias' => 'Updated Alias 1', 'fund_id' => 1],
+            ['alias' => 'Alias 3', 'fund_id' => 1],
+        ];
+
+        $updatedResults = $this->fundAliasService->upsertMany($updatedAliases);
+
+        $this->assertCount(2, $updatedResults);
+        $this->assertDatabaseHas('fund_aliases', ['alias' => 'Updated Alias 1', 'fund_id' => 1]);
+        $this->assertDatabaseHas('fund_aliases', ['alias' => 'Alias 3', 'fund_id' => 1]);
     }
 }
