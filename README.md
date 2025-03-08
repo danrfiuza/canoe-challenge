@@ -16,18 +16,18 @@ ER Diagram:
 
 ## Getting Started
 
-### Clone the Repository
+### 1- Clone the Repository
 ```bash
 git clone https://github.com/danrfiuza/canoe-challenge.git
 cd canoe-challenge
 ```
 
-### Install Dependencies
+### 2- Install Dependencies
 ```bash
 composer install
 ```
 
-### Configure Environment
+### 3- Configure Environment
 Copy the `.env.example` to `.env` and configure your environment variables:
 ```bash
 cp .env.example .env
@@ -35,7 +35,7 @@ cp .env.example .env
 
 Set your database credentials and any other required configurations.
 
-### Start the Application
+### 4- Start the Application
 Laravel Sail provides a simple way to run your Laravel application using Docker.
 
 First, install the Sail dependencies:
@@ -53,20 +53,43 @@ To run in detached mode:
 ./vendor/bin/sail up -d
 ```
 
-### Database Migration
+### 5- Database Migration
 Run the database migrations:
 ```bash
 ./vendor/bin/sail artisan migrate
 ```
 
-### Seed Database (Optional)
+### 6- Seed Database (Optional)
+A initial data seed will be created
+
 ```bash
 ./vendor/bin/sail artisan db:seed
 ```
 
-### Testing API Endpoints
+### 7- Running broadcast server
+To check execution of the notifications is necessary to start the following services:
+
+To start reverb server (broadcast):
+```bash
+./vendor/bin/sail artisan reverb:start
+```
+To start queue listener:
+```bash
+./vendor/bin/sail artisan queue:listen
+```
+
+### 7- Start the frontend
+```
+sail npm install && npm run dev
+```
+
+---
+## Testing API Endpoints
 Use tools like **Postman** or **Insomnia** to test API endpoints.
 Default API URL: `http://localhost/api`
+
+## API Documentation
+For API endpoints documentation, visit `http://localhost/docs/api`.
 
 ## Running Tests
 To execute tests:
@@ -82,6 +105,3 @@ To execute tests:
 | `sail artisan migrate`        | Run migrations      |
 | `sail artisan db:seed`        | Seed database       |
 | `sail npm install`            | Install Node dependencies |
-
-## API Documentation
-For API endpoints documentation, visit `http://localhost/docs/api`.
