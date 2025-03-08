@@ -11,7 +11,7 @@
                 </FundDialog>
                 <FundTable :funds="funds" @edit="editFund" @delete="deleteFund" @refresh="fetchFunds" />
             </CardContent>
-            <CardFooter>
+            <CardFooter class="flex justify-end">
                 <Pagination :currentPage="currentPage" :totalItems="totalItems" :itemsPerPage="itemsPerPage"
                     @pageChanged="fetchFunds" />
             </CardFooter>

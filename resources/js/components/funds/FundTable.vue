@@ -1,6 +1,5 @@
 <template>
     <Table>
-        <TableCaption>A list of your funds.</TableCaption>
         <TableHeader>
             <TableRow>
                 <TableHead class="w-[100px]">ID</TableHead>

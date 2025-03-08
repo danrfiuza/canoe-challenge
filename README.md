@@ -6,7 +6,7 @@
 - You can find the detailed project requirements in the [PDF file](docs/canoe-intelligence-sr.-software-engineer-tech-assessment.pdf) located in the `docs` directory.
 
 ER Diagram:
-![alt text](docs/image.png)
+![alt text](docs/er.png)
 
 ## Prerequisites
 
@@ -83,6 +83,9 @@ To start queue listener:
 sail npm install && npm run dev
 ```
 
+![alt text](docs/list.png)
+
+![alt text](docs/form.png)
 ---
 ## Testing API Endpoints
 Use tools like **Postman** or **Insomnia** to test API endpoints.
