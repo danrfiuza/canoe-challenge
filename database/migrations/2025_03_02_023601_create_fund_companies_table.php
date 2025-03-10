@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('fund_companies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fund_id')->constrained('funds')->onDelete('cascade');
-            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
+            $table->foreignId('fund_id')->constrained('funds')->onDelete('cascade')->index();
+            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade')->index();
             $table->timestamps();
         });
     }
