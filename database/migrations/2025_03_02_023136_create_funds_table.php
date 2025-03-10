@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('funds', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('start_year');
-            $table->foreignId('fund_manager_id')->constrained('fund_managers')->onDelete('cascade');
+            $table->string('name')->index();
+            $table->integer('start_year')->index();
+            $table->foreignId('fund_manager_id')->constrained('fund_managers')->onDelete('cascade')->index();
             $table->timestamps();
         });
     }

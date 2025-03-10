@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('fund_aliases', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fund_id')->constrained('funds')->onDelete('cascade');
-            $table->string('alias');
+            $table->foreignId('fund_id')->constrained('funds')->onDelete('cascade')->index();
+            $table->string('alias')->index();
             $table->timestamps();
         });
     }
